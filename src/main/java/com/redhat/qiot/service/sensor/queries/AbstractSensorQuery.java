@@ -5,6 +5,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.slf4j.Logger;
 
 import com.redhat.qiot.domain.SensorBean;
@@ -19,20 +20,20 @@ abstract class AbstractSensorQuery implements SensorQuery {
 
     private WebTarget target;
 
-    // TODO: must be injected from application properties!
-    final String BASIC_URI = "http://192.168.178.53:5000";
+    String BASE_URI;
 
     final String URI_STRING;
 
     AbstractSensorQuery() {
-	super();
+	BASE_URI=ConfigProvider.getConfig().getValue("service.sensors.uri", String.class);
 	URI_STRING = getUriString();
     }
-    
+
     abstract String getUriString();
 
     @Override
     public SensorBean querySensor() {
+	LOGGER.info("BASE_URI: " + BASE_URI);
 //	"http://192.168.178.53:5000/weather/compensatedtemperature"
 	Client client = restClientProducer.getClient();
 	target = client.target(URI_STRING);

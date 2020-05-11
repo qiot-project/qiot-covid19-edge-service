@@ -15,7 +15,7 @@ public class LightSensorQuery extends AbstractSensorQuery {
 
     @Override
     String getUriString() {
-	return this.BASIC_URI + SensorQueryEnum.LIGHT.getPath();
+	return this.BASE_URI + SensorQueryEnum.LIGHT.getPath();
     }
 
     @Override

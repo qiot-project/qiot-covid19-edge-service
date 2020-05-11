@@ -15,7 +15,7 @@ public class OxidisingSensorQuery extends AbstractSensorQuery {
 
     @Override
     String getUriString() {
-	return this.BASIC_URI + SensorQueryEnum.OXIDISING.getPath();
+	return this.BASE_URI + SensorQueryEnum.OXIDISING.getPath();
     }
 
     @Override

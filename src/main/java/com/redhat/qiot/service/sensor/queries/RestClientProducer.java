@@ -28,7 +28,6 @@ class RestClientProducer {
     private Client client;
 
     void onStart(@Observes StartupEvent ev) {
-	LOGGER.info("The application is starting...{}");
 	client = ClientBuilder.newClient();
     }
 
@@ -37,7 +36,6 @@ class RestClientProducer {
     }
 
     void onStop(@Observes ShutdownEvent ev) {
-	LOGGER.info("The application is stopping... {}");
 	client.close();
     }
 }

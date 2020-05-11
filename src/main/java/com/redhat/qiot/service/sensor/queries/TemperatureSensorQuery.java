@@ -15,7 +15,7 @@ public class TemperatureSensorQuery extends AbstractSensorQuery {
 
     @Override
     String getUriString() {
-	return this.BASIC_URI + SensorQueryEnum.TEMPERATURE.getPath();
+	return this.BASE_URI + SensorQueryEnum.TEMPERATURE.getPath();
     }
 
     @Override

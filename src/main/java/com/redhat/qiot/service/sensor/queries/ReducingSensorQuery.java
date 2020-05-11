@@ -15,7 +15,7 @@ public class ReducingSensorQuery extends AbstractSensorQuery {
 
     @Override
     String getUriString() {
-	return this.BASIC_URI + SensorQueryEnum.REDUCING.getPath();
+	return this.BASE_URI + SensorQueryEnum.REDUCING.getPath();
     }
 
     @Override

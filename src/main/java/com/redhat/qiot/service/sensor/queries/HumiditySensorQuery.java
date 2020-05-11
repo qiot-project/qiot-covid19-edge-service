@@ -15,7 +15,7 @@ public class HumiditySensorQuery extends AbstractSensorQuery {
 
     @Override
     String getUriString() {
-	return this.BASIC_URI + SensorQueryEnum.HUMIDITY.getPath();
+	return this.BASE_URI + SensorQueryEnum.HUMIDITY.getPath();
     }
 
     @Override
