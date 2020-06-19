@@ -1,1 +1,0 @@
-package com.redhat.qiot.service.sensor.queries;
