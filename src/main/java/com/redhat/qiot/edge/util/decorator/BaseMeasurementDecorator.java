@@ -44,13 +44,18 @@ public class BaseMeasurementDecorator
         JsonObject finalJsonObject = null;
         JsonObjectBuilder job = null;
         String decoratedMeasurement = null;
+        int stationId = 0;
         try (JsonReader reader = Json
                 .createReader(new StringReader(measurement));) {
             mJsonObject = reader.readObject();
         }
         job = Json.createObjectBuilder();
-        job.add("stationId", stationIdService.getStationId())
-                .add("instant", Instant.now().toEpochMilli());
+        try {
+            stationId = stationIdService.getStationId();
+        } catch (Exception e) {
+        }
+        job.add("stationId", stationId).add("instant",
+                Instant.now().toEpochMilli());
         for (Entry<String, JsonValue> entry : mJsonObject
                 .entrySet()) {
             job.add(entry.getKey(), entry.getValue());
