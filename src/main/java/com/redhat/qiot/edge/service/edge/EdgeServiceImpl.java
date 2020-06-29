@@ -102,23 +102,23 @@ class EdgeServiceImpl implements EdgeService {
             measurement = sensorClientService.getGasMeasurement();
             decoratedMeasurement = measurementDecorator
                     .decorate(measurement);
-            LOGGER.info("Gas measurement: {}", decoratedMeasurement);
+            LOGGER.info("Collected GAS measurement: {}", decoratedMeasurement);
             dataHubClientService.sendGas(decoratedMeasurement);
         } catch (Exception e) {
             LOGGER.error(
-                    "An error occurred retrieving GAS maeasurement");
+                    "An error occurred retrieving GAS maeasurement",e);
         }
         try {
             measurement = sensorClientService
                     .getParticulatesMeasurement();
             decoratedMeasurement = measurementDecorator
                     .decorate(measurement);
-            LOGGER.info("Particulates measurement: {}",
+            LOGGER.info("Collected PARTICULA measurement: {}",
                     decoratedMeasurement);
             dataHubClientService.sendPollution(decoratedMeasurement);
         } catch (Exception e) {
             LOGGER.error(
-                    "An error occurred retrieving Particulates maeasurement");
+                    "An error occurred retrieving Particulates maeasurement",e);
         }
     }
 

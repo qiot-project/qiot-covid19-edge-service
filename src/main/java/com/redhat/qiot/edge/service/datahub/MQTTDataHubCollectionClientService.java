@@ -37,10 +37,12 @@ public class MQTTDataHubCollectionClientService {
     Emitter<String> pollutionEmitter;
 
     public void sendGas(String data) {
+        LOGGER.info("Sending out GAS measurement");
         gasEmitter.send(data);
     }
 
     public void sendPollution(String data) {
+        LOGGER.info("Sending out PARTICULATES measurement");
         pollutionEmitter.send(data);
     }
 }
