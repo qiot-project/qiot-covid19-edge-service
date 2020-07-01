@@ -21,7 +21,7 @@ import javax.json.JsonValue;
 import org.slf4j.Logger;
 
 
-import com.redhat.qiot.edge.service.edge.StationIdService;
+import com.redhat.qiot.edge.service.edge.StationService;
 
 
 /**
@@ -36,7 +36,7 @@ public class BaseMeasurementDecorator
     Logger LOGGER;
 
     @Inject
-    StationIdService stationIdService;
+    StationService stationIdService;
 
     @Override
     public String decorate(String measurement) {
@@ -54,8 +54,9 @@ public class BaseMeasurementDecorator
             stationId = stationIdService.getStationId();
         } catch (Exception e) {
         }
+        //InfluxDB expects timestamps in nanoseconds
         job.add("stationId", stationId).add("instant",
-                Instant.now().toEpochMilli());
+                Instant.now().getNano());
         for (Entry<String, JsonValue> entry : mJsonObject
                 .entrySet()) {
             job.add(entry.getKey(), entry.getValue());

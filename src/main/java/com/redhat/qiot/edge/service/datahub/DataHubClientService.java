@@ -5,6 +5,7 @@
 package com.redhat.qiot.edge.service.datahub;
 
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
@@ -21,19 +22,18 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
  * @author abattagl
  *
  */
-@Path("/v1")
+@Path("/v1/register")
 @RegisterRestClient(configKey = "datahub-api")
+@ApplicationScoped
 public interface DataHubClientService {
 
     @PUT
-    @Path("/register")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    int register(@QueryParam("stationData") String stationData)
+    String register(@QueryParam("stationData") String stationData)
             throws Exception;
 
     @DELETE
-    @Path("/register")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
     void unregister(@QueryParam("id") int id) throws Exception;
 }
