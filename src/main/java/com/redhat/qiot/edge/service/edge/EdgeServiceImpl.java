@@ -3,8 +3,6 @@
  */
 package com.redhat.qiot.edge.service.edge;
 
-import java.time.Instant;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -84,70 +82,77 @@ class EdgeServiceImpl implements EdgeService {
     String address;
 
     void onStart(@Observes StartupEvent ev) {
-	LOGGER.info("The application is starting...{}");
+        LOGGER.info("The application is starting...{}");
     }
 
     @PostConstruct
     void init() {
-	try {
-	    // TODO:complete station registration process
-	    String stationSerial = sensorClientService.getStationId();
-	    serialIDCollectedEvent.fire(stationSerial);
-	    LOGGER.info("Station serial ID is {}", stationSerial);
-	    CoordinatesBean coordinatesBean = locationService.getCoordinates(address);
-	    coordinatesFoundEvent.fire(coordinatesBean);
-	    LOGGER.info("Station coordinates are {}", coordinatesBean);
+        try {
+            // TODO:complete station registration process
+            String stationSerial = sensorClientService.getStationId();
+            serialIDCollectedEvent.fire(stationSerial);
+            LOGGER.info("Station serial ID is {}", stationSerial);
+            CoordinatesBean coordinatesBean = locationService
+                    .getCoordinates(address);
+            coordinatesFoundEvent.fire(coordinatesBean);
+            LOGGER.info("Station coordinates are {}", coordinatesBean);
 
-	    JsonObject jsonObject = null;
-	    JsonObjectBuilder jsonObjectBuilder = null;
-	    String jsonString = null;
+            JsonObject jsonObject = null;
+            JsonObjectBuilder jsonObjectBuilder = null;
+            String jsonString = null;
 
-	    jsonObjectBuilder = Json.createObjectBuilder();
-	    jsonObjectBuilder.add("stationSerial", stationSerial).add("lon", coordinatesBean.longitude).add("lat",
-		    coordinatesBean.latitude);
-	    jsonObject = jsonObjectBuilder.build();
-	    jsonObjectBuilder = null;
-	    jsonString = jsonObject.toString();
-	    jsonObject = null;
+            jsonObjectBuilder = Json.createObjectBuilder();
+            jsonObjectBuilder.add("stationSerial", stationSerial)
+                    .add("lon", coordinatesBean.longitude)
+                    .add("lat", coordinatesBean.latitude);
+            jsonObject = jsonObjectBuilder.build();
+            jsonObjectBuilder = null;
+            jsonString = jsonObject.toString();
+            jsonObject = null;
 
-	    int stationId = Integer.parseInt(dataHubClientService.register(jsonString));
-	    LOGGER.info("Station ID is {}", stationId);
+            int stationId = Integer
+                    .parseInt(dataHubClientService.register(jsonString));
+            LOGGER.info("Station ID is {}", stationId);
 
-	    registrationSuccessfulEvent.fire(stationId);
-	} catch (Exception e) {
-	    LOGGER.error("Cannot register to the server", e);
-	}
+            registrationSuccessfulEvent.fire(stationId);
+        } catch (Exception e) {
+            LOGGER.error("Cannot register to the server", e);
+        }
     }
 
     @Scheduled(every = "3s")
     void run() {
-	String measurement = null;
-	String decoratedMeasurement = null;
-	try {
-	    measurement = sensorClientService.getGasMeasurement();
-	    decoratedMeasurement = measurementDecorator.decorate(measurement);
-	    LOGGER.info("Collected GAS measurement: {}", decoratedMeasurement);
-	    mqttDataCollectionClientService.sendGas(decoratedMeasurement);
-	} catch (Exception e) {
-	    LOGGER.error("An error occurred retrieving GAS maeasurement", e);
-	}
-	try {
-	    measurement = sensorClientService.getParticulatesMeasurement();
-	    decoratedMeasurement = measurementDecorator.decorate(measurement);
-	    LOGGER.info("Collected PARTICULA measurement: {}", decoratedMeasurement);
-	    mqttDataCollectionClientService.sendPollution(decoratedMeasurement);
-	} catch (Exception e) {
-	    LOGGER.error("An error occurred retrieving Particulates maeasurement", e);
-	}
+        String measurement = null;
+        String decoratedMeasurement = null;
+        try {
+            measurement = sensorClientService.getGasMeasurement();
+            decoratedMeasurement = measurementDecorator.decorate(measurement);
+            LOGGER.info("Collected GAS measurement: {}", decoratedMeasurement);
+            mqttDataCollectionClientService.sendGas(decoratedMeasurement);
+        } catch (Exception e) {
+            LOGGER.error("An error occurred retrieving GAS maeasurement", e);
+        }
+        try {
+            measurement = sensorClientService.getParticulatesMeasurement();
+            decoratedMeasurement = measurementDecorator.decorate(measurement);
+            LOGGER.info("Collected PARTICULA measurement: {}",
+                    decoratedMeasurement);
+            mqttDataCollectionClientService.sendPollution(decoratedMeasurement);
+        } catch (Exception e) {
+            LOGGER.error(
+                    "An error occurred retrieving Particulates maeasurement",
+                    e);
+        }
     }
 
     @PreDestroy
     void destroy() {
-	try {
-	    LOGGER.info("Unregistering thet measurement station.");
-	    dataHubClientService.unregister(stationIdService.getStationId());
-	} catch (Exception e) {
-	    LOGGER.error("An error occurred unregistering the station", e);
-	}
+        try {
+            LOGGER.info("Unregistering thet measurement station.");
+            dataHubClientService.unregister(
+                    Integer.toString(stationIdService.getStationId()));
+        } catch (Exception e) {
+            LOGGER.error("An error occurred unregistering the station", e);
+        }
     }
 }

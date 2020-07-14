@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 
@@ -35,5 +34,5 @@ public interface DataHubClientService {
 
     @DELETE
     @Consumes(MediaType.TEXT_PLAIN)
-    void unregister(@QueryParam("id") int id) throws Exception;
+    void unregister(@QueryParam("id") String id) throws Exception;
 }
