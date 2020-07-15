@@ -24,6 +24,9 @@ RUN chmod 775 /work /work/application \
   && chmod -R "g+rwX" /work \
   && chown -R 1001:root /work
 
+RUN mkdir -p /tmp/qiot/truststore
+COPY --chown=1001:root truststore/client.truststore /tmp/qiot/truststore/
+
 EXPOSE 8080
 USER 1001
 

@@ -102,7 +102,7 @@ class EdgeServiceImpl implements EdgeService {
             String jsonString = null;
 
             jsonObjectBuilder = Json.createObjectBuilder();
-            jsonObjectBuilder.add("stationSerial", stationSerial)
+            jsonObjectBuilder.add("serial", stationSerial).add("name", "Andrea")
                     .add("lon", coordinatesBean.longitude)
                     .add("lat", coordinatesBean.latitude);
             jsonObject = jsonObjectBuilder.build();
