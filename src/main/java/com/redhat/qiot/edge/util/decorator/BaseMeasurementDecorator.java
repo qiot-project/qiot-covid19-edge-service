@@ -3,11 +3,10 @@
  */
 package com.redhat.qiot.edge.util.decorator;
 
-
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Map.Entry;
-
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,20 +16,16 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
-
 import org.slf4j.Logger;
 
-
 import com.redhat.qiot.edge.service.edge.StationService;
-
 
 /**
  * @author Andrea
  *
  */
 @Singleton
-public class BaseMeasurementDecorator
-        implements MeasurementDecorator {
+public class BaseMeasurementDecorator implements MeasurementDecorator {
 
     @Inject
     Logger LOGGER;
@@ -54,11 +49,10 @@ public class BaseMeasurementDecorator
             stationId = stationIdService.getStationId();
         } catch (Exception e) {
         }
-        //InfluxDB expects timestamps in nanoseconds
+        // InfluxDB expects timestamps in nanoseconds
         job.add("stationId", stationId).add("instant",
-                Instant.now().getNano());
-        for (Entry<String, JsonValue> entry : mJsonObject
-                .entrySet()) {
+                Calendar.getInstance().getTimeInMillis());
+        for (Entry<String, JsonValue> entry : mJsonObject.entrySet()) {
             job.add(entry.getKey(), entry.getValue());
         }
         mJsonObject = null;
