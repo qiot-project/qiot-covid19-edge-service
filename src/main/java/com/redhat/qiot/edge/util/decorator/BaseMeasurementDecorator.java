@@ -5,6 +5,8 @@ package com.redhat.qiot.edge.util.decorator;
 
 import java.io.StringReader;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Map.Entry;
 
@@ -50,8 +52,9 @@ public class BaseMeasurementDecorator implements MeasurementDecorator {
         } catch (Exception e) {
         }
         // InfluxDB expects timestamps in nanoseconds
-        job.add("stationId", stationId).add("instant",
-                Calendar.getInstance().getTimeInMillis());
+        job.add("stationId", stationId)//
+                .add("instant", OffsetDateTime.now(ZoneOffset.UTC).toInstant()
+                        .toEpochMilli());
         for (Entry<String, JsonValue> entry : mJsonObject.entrySet()) {
             job.add(entry.getKey(), entry.getValue());
         }
