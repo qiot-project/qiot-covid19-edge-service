@@ -3,6 +3,8 @@
  */
 package com.redhat.qiot.edge.service.edge;
 
+import java.util.Objects;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -78,8 +80,12 @@ class EdgeServiceImpl implements EdgeService {
     @CoordinatesFound
     Event<CoordinatesBean> coordinatesFoundEvent;
 
+    @ConfigProperty(name = "station.serial")
+    String STATION_SERIAL;
     @ConfigProperty(name = "station.address")
-    String address;
+    String STATION_ADDRESS;
+    @ConfigProperty(name = "station.name")
+    String STATION_NAME;
 
     void onStart(@Observes StartupEvent ev) {
         LOGGER.info("The application is starting...{}");
@@ -88,12 +94,14 @@ class EdgeServiceImpl implements EdgeService {
     @PostConstruct
     void init() {
         try {
-            // TODO:complete station registration process
-            String stationSerial = sensorClientService.getStationId();
+            String stationSerial = STATION_SERIAL;
+            if(Objects.isNull(STATION_SERIAL))
+                stationSerial = sensorClientService.getStationId();
+            
             serialIDCollectedEvent.fire(stationSerial);
             LOGGER.info("Station serial ID is {}", stationSerial);
             CoordinatesBean coordinatesBean = locationService
-                    .getCoordinates(address);
+                    .getCoordinates(STATION_ADDRESS);
             coordinatesFoundEvent.fire(coordinatesBean);
             LOGGER.info("Station coordinates are {}", coordinatesBean);
 
@@ -102,7 +110,7 @@ class EdgeServiceImpl implements EdgeService {
             String jsonString = null;
 
             jsonObjectBuilder = Json.createObjectBuilder();
-            jsonObjectBuilder.add("serial", stationSerial).add("name", "Andrea")
+            jsonObjectBuilder.add("serial", stationSerial).add("name", STATION_NAME)
                     .add("lon", coordinatesBean.longitude)
                     .add("lat", coordinatesBean.latitude);
             jsonObject = jsonObjectBuilder.build();
