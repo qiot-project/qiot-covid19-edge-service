@@ -158,7 +158,7 @@ class EdgeServiceImpl implements EdgeService {
         try {
             LOGGER.info("Unregistering thet measurement station.");
             dataHubClientService.unregister(
-                    Integer.toString(stationIdService.getStationId()));
+                    stationIdService.getStationId());
         } catch (Exception e) {
             LOGGER.error("An error occurred unregistering the station", e);
         }

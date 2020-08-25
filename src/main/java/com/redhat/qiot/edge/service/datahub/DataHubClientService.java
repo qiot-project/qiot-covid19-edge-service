@@ -32,5 +32,5 @@ public interface DataHubClientService {
 
     @DELETE
     @Consumes(MediaType.TEXT_PLAIN)
-    void unregister(@QueryParam("id") String id) throws Exception;
+    void unregister(@QueryParam("id") int id) throws Exception;
 }
