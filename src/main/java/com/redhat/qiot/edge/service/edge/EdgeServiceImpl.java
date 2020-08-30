@@ -128,7 +128,7 @@ class EdgeServiceImpl implements EdgeService {
         }
     }
 
-    @Scheduled(every = "3s")
+    @Scheduled(every = "10s")
     void run() {
         String measurement = null;
         String decoratedMeasurement = null;
