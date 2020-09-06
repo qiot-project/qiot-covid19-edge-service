@@ -51,10 +51,9 @@ public class BaseMeasurementDecorator implements MeasurementDecorator {
             stationId = stationIdService.getStationId();
         } catch (Exception e) {
         }
-        // InfluxDB expects timestamps in nanoseconds
         job.add("stationId", stationId)//
                 .add("instant", OffsetDateTime.now(ZoneOffset.UTC).toInstant()
-                        .toEpochMilli());
+                        .toString());
         for (Entry<String, JsonValue> entry : mJsonObject.entrySet()) {
             job.add(entry.getKey(), entry.getValue());
         }
