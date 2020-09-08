@@ -11,9 +11,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -94,10 +91,15 @@ class EdgeServiceImpl implements EdgeService {
     @PostConstruct
     void init() {
         try {
-            String stationSerial = STATION_SERIAL;
-            if(Objects.isNull(STATION_SERIAL))
+            String stationSerial = null;
+            try {
                 stationSerial = sensorClientService.getStationId();
-            
+            } catch (Exception e) {
+            }
+            ;
+            if (Objects.isNull(stationSerial))
+                stationSerial = STATION_SERIAL;
+
             serialIDCollectedEvent.fire(stationSerial);
             LOGGER.info("Station serial ID is {}", stationSerial);
             CoordinatesBean coordinatesBean = locationService
@@ -105,21 +107,23 @@ class EdgeServiceImpl implements EdgeService {
             coordinatesFoundEvent.fire(coordinatesBean);
             LOGGER.info("Station coordinates are {}", coordinatesBean);
 
-            JsonObject jsonObject = null;
-            JsonObjectBuilder jsonObjectBuilder = null;
-            String jsonString = null;
+            // JsonObject jsonObject = null;
+            // JsonObjectBuilder jsonObjectBuilder = null;
+            // String jsonString = null;
+            //
+            // jsonObjectBuilder = Json.createObjectBuilder();
+            // jsonObjectBuilder.add("serial", stationSerial)
+            // .add("name", STATION_NAME)
+            // .add("lon", coordinatesBean.longitude)
+            // .add("lat", coordinatesBean.latitude);
+            // jsonObject = jsonObjectBuilder.build();
+            // jsonObjectBuilder = null;
+            // jsonString = jsonObject.toString();
+            // jsonObject = null;
 
-            jsonObjectBuilder = Json.createObjectBuilder();
-            jsonObjectBuilder.add("serial", stationSerial).add("name", STATION_NAME)
-                    .add("lon", coordinatesBean.longitude)
-                    .add("lat", coordinatesBean.latitude);
-            jsonObject = jsonObjectBuilder.build();
-            jsonObjectBuilder = null;
-            jsonString = jsonObject.toString();
-            jsonObject = null;
-
-            int stationId = Integer
-                    .parseInt(dataHubClientService.register(jsonString));
+            int stationId = Integer.parseInt(dataHubClientService.register(
+                    stationSerial, STATION_NAME, coordinatesBean.longitude,
+                    coordinatesBean.latitude));
             LOGGER.info("Station ID is {}", stationId);
 
             registrationSuccessfulEvent.fire(stationId);
@@ -128,7 +132,7 @@ class EdgeServiceImpl implements EdgeService {
         }
     }
 
-    @Scheduled(every = "10s")
+    @Scheduled(every = "5s")
     void run() {
         String measurement = null;
         String decoratedMeasurement = null;
@@ -157,8 +161,7 @@ class EdgeServiceImpl implements EdgeService {
     void destroy() {
         try {
             LOGGER.info("Unregistering thet measurement station.");
-            dataHubClientService.unregister(
-                    stationIdService.getStationId());
+            dataHubClientService.unregister(stationIdService.getStationId());
         } catch (Exception e) {
             LOGGER.error("An error occurred unregistering the station", e);
         }
