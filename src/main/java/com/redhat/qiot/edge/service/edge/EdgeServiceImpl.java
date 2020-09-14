@@ -96,7 +96,7 @@ class EdgeServiceImpl implements EdgeService {
                 stationSerial = sensorClientService.getStationId();
             } catch (Exception e) {
             }
-            ;
+
             if (Objects.isNull(stationSerial))
                 stationSerial = STATION_SERIAL;
 
