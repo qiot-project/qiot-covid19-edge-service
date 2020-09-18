@@ -4,7 +4,6 @@ package com.redhat.qiot.edge.service.location;
 import java.io.InputStream;
 import java.net.URL;
 
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.json.Json;
@@ -12,9 +11,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-
 import org.slf4j.Logger;
-
 
 import com.redhat.qiot.edge.domain.CoordinatesBean;
 

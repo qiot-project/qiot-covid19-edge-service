@@ -1,7 +1,7 @@
 package com.redhat.qiot.edge.service.edge;
 
 
-public interface StationService {
+public interface MeasurementStationService {
 
     int getStationId();
 }

@@ -30,10 +30,10 @@ public class MQTTDataHubCollectionClientService {
     Logger LOGGER;
 
     @Inject
-    @Channel("gas")
+    @Channel("datahub-gas")
     Emitter<String> gasEmitter;
     @Inject
-    @Channel("pollution")
+    @Channel("datahub-pollution")
     Emitter<String> pollutionEmitter;
 
     public void sendGas(String data) {

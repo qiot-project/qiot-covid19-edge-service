@@ -4,14 +4,12 @@
 package com.redhat.qiot.edge.util.decorator;
 
 import java.io.StringReader;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
 import java.util.Map.Entry;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -20,20 +18,20 @@ import javax.json.JsonValue;
 
 import org.slf4j.Logger;
 
-import com.redhat.qiot.edge.service.edge.StationService;
+import com.redhat.qiot.edge.service.edge.MeasurementStationService;
 
 /**
  * @author Andrea
  *
  */
-@Singleton
+@ApplicationScoped
 public class BaseMeasurementDecorator implements MeasurementDecorator {
 
     @Inject
     Logger LOGGER;
 
     @Inject
-    StationService stationIdService;
+    MeasurementStationService measurementStationService;
 
     @Override
     public String decorate(String measurement) {
@@ -47,10 +45,7 @@ public class BaseMeasurementDecorator implements MeasurementDecorator {
             mJsonObject = reader.readObject();
         }
         job = Json.createObjectBuilder();
-        try {
-            stationId = stationIdService.getStationId();
-        } catch (Exception e) {
-        }
+            stationId = measurementStationService.getStationId();
         job.add("stationId", stationId)//
                 .add("instant", OffsetDateTime.now(ZoneOffset.UTC).toInstant()
                         .toString());

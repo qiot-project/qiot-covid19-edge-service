@@ -1,1 +1,0 @@
-package com.redhat.qiot.edge.util.events;

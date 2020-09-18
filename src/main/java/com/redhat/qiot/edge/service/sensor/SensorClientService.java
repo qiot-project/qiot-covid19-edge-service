@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 
@@ -29,16 +28,4 @@ public interface SensorClientService {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     String getStationId() throws Exception;
-
-    @GET
-    @Path("/gas/all")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    String getGasMeasurement() throws Exception;
-
-    @GET
-    @Path("/particulates/all")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    String getParticulatesMeasurement() throws Exception;
 }
