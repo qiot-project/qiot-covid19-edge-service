@@ -55,9 +55,7 @@ public class RabbitMQClientTest {
         client = RabbitMQClient.create(vertx, new RabbitMQOptions()
                 // .setUri(rabbitMQUri)
                 .setHost(rabbitMQHost).setPort(rabbitMQPort)
-                .setUser(rabbitMQUsername).setPassword(rabbitMQPassword)
-                .setAutomaticRecoveryEnabled(true)
-                .setConnectionRetries(Integer.MAX_VALUE));
+                .setUser(rabbitMQUsername).setPassword(rabbitMQPassword));
         client.startAndAwait();
 
         /*
