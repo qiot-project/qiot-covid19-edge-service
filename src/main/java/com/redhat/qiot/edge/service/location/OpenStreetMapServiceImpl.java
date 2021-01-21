@@ -30,11 +30,11 @@ public class OpenStreetMapServiceImpl
     public CoordinatesBean getCoordinates(String address)
             throws Exception {
         CoordinatesBean coordinates = null;
-        StringBuffer query = null;
+        StringBuilder query = null;
         String[] split = null;
 
         split = address.split(" ");
-        query = new StringBuffer();
+        query = new StringBuilder();
         query.append("https://nominatim.openstreetmap.org/search?q=");
 
         if (split.length == 0) {
