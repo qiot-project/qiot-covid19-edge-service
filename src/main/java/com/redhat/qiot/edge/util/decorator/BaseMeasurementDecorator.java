@@ -20,7 +20,7 @@ import javax.json.JsonValue;
 
 import org.slf4j.Logger;
 
-import com.redhat.qiot.edge.service.edge.StationService;
+import com.redhat.qiot.edge.service.station.StationService;
 
 /**
  * @author Andrea
@@ -32,25 +32,17 @@ public class BaseMeasurementDecorator implements MeasurementDecorator {
     @Inject
     Logger LOGGER;
 
-    @Inject
-    StationService stationIdService;
-
     @Override
-    public String decorate(String measurement) {
+    public String decorate(String stationId, String measurement) {
         JsonObject mJsonObject = null;
         JsonObject finalJsonObject = null;
         JsonObjectBuilder job = null;
         String decoratedMeasurement = null;
-        int stationId = 0;
         try (JsonReader reader = Json
                 .createReader(new StringReader(measurement));) {
             mJsonObject = reader.readObject();
         }
         job = Json.createObjectBuilder();
-        try {
-            stationId = stationIdService.getStationId();
-        } catch (Exception e) {
-        }
         job.add("stationId", stationId)//
                 .add("instant", OffsetDateTime.now(ZoneOffset.UTC).toInstant()
                         .toString());

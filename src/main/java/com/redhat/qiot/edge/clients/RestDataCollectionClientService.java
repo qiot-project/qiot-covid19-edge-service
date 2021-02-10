@@ -2,7 +2,7 @@
  * 
  */
 
-package com.redhat.qiot.edge.service.datahub;
+package com.redhat.qiot.edge.clients;
 
 
 import javax.ws.rs.PUT;

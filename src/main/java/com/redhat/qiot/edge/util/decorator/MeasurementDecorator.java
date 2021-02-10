@@ -9,5 +9,5 @@ package com.redhat.qiot.edge.util.decorator;
  *
  */
 public interface MeasurementDecorator {
-    String decorate(String measurement);
+    String decorate(String stationId, String measurement);
 }

@@ -22,13 +22,13 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
  */
 @Path("/")
 @RegisterRestClient(configKey = "sensor-api")
-public interface SensorClientService {
+public interface SensorServiceClient {
 
     @GET
     @Path("/system/id")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    String getStationId() throws Exception;
+    String getSerialId() throws Exception;
 
     @GET
     @Path("/gas/all")

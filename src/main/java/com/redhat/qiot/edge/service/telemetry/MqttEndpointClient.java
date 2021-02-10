@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.redhat.qiot.edge.service.datahub;
+package com.redhat.qiot.edge.service.telemetry;
 
 
 import javax.enterprise.context.ApplicationScoped;
@@ -24,7 +24,7 @@ import org.slf4j.Logger;
  *
  */
 @ApplicationScoped
-public class MQTTDataHubCollectionClientService {
+public class MqttEndpointClient {
 
     @Inject
     Logger LOGGER;

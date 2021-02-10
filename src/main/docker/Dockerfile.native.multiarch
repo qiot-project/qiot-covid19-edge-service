@@ -15,6 +15,11 @@ RUN chmod 775 /work /work/application \
   && chmod -R "g+rwX" /work \
   && chown -R 1001:root /work
 
+RUN mkdir -p /var/data/qiot/
+  && chown -R 1001 /var/data/qiot \
+  && chmod -R "g+rwX" /var/data/qiot \
+  && chown -R 1001:root /var/data/qiot
+
 EXPOSE 8080
 USER 1001
 

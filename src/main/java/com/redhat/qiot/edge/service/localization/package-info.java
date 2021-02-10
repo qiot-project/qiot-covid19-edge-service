@@ -7,4 +7,4 @@
  */
 
 
-package com.redhat.qiot.edge.service.location;
+package com.redhat.qiot.edge.service.localization;

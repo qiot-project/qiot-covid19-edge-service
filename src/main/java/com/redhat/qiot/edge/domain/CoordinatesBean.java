@@ -4,6 +4,7 @@ package com.redhat.qiot.edge.domain;
 public class CoordinatesBean {
     public double longitude;
     public double latitude;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -15,6 +16,7 @@ public class CoordinatesBean {
         result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -32,11 +34,11 @@ public class CoordinatesBean {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
-        return "Coordinates [longitude=" + longitude + ", latitude="
-                + latitude + "]";
+        return "Coordinates [longitude=" + longitude + ", latitude=" + latitude
+                + "]";
     }
-    
-    
+
 }
