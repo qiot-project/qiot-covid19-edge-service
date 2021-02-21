@@ -48,9 +48,11 @@ ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jb
 COPY target/lib/* /deployments/lib/
 COPY target/*-runner.jar /deployments/app.jar
 
-RUN mkdir -p /tmp/qiot/truststore
-COPY --chown=1001:root truststore/client.truststore /tmp/qiot/truststore/
-
+RUN mkdir -p /var/data/qiot/ \
+  && chown -R 1001 /var/data/qiot \
+  && chmod -R "g+rwX" /var/data/qiot \
+  && chown -R 1001:root /var/data/qiot
+  
 EXPOSE 8080
 USER 1001
 

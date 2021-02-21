@@ -6,6 +6,7 @@
 package io.qiot.covid19.edge.service.sensor;
 
 
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,7 +29,7 @@ public interface SensorServiceClient {
     @Path("/system/id")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    String getSerialId() throws Exception;
+    JsonObject getSerialId() throws Exception;
 
     @GET
     @Path("/gas/all")

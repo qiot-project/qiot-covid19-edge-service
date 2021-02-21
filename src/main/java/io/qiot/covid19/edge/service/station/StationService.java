@@ -6,6 +6,7 @@ package io.qiot.covid19.edge.service.station;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -110,7 +111,11 @@ public class StationService {
 
             stationData = new StationDataBean();
             try {
-                stationData.serial = STATION_SERIAL;
+                if (STATION_SERIAL.equals("empty"))
+                    stationData.serial = sensorServiceClient.getSerialId()
+                            .getString("id");
+                else
+                    stationData.serial = STATION_SERIAL;
                 stationData.name = STATION_NAME;
                 stationData.coordinates = localizationService
                         .getCoordinates(STATION_ADDRESS);
