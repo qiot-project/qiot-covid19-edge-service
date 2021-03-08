@@ -7,26 +7,26 @@ package io.qiot.covid19.edge.util.exception;
  * @author andreabattaglia
  *
  */
-public class DataValidationException extends Exception {
+public class DataDecorationException extends Exception {
 
-    public DataValidationException() {
+    public DataDecorationException() {
         super();
     }
 
-    public DataValidationException(String message, Throwable cause,
+    public DataDecorationException(String message, Throwable cause,
             boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public DataValidationException(String message, Throwable cause) {
+    public DataDecorationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public DataValidationException(String message) {
+    public DataDecorationException(String message) {
         super(message);
     }
 
-    public DataValidationException(Throwable cause) {
+    public DataDecorationException(Throwable cause) {
         super(cause);
     }
 

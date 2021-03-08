@@ -4,7 +4,7 @@
 package io.qiot.covid19.edge.util.exception;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 public class RegistrationException extends Exception {

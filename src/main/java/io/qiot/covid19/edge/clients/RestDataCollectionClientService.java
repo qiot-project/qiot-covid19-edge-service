@@ -16,7 +16,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 @Path("/v1")

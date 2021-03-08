@@ -1,4 +1,4 @@
-FROM quay.io/qiotcovid19/quarkus-ubi-multiarch-builder:v1.2.1 AS builder
+FROM quay.io/qiot/quarkus-ubi-multiarch-builder:v1.3.0-21.0.0.2-java11 AS builder
 RUN mkdir -p /usr/src/app
 COPY pom.xml /usr/src/app/
 RUN mvn -f /usr/src/app/pom.xml -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies

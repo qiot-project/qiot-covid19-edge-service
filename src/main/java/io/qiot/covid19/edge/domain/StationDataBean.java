@@ -9,7 +9,6 @@ public class StationDataBean {
     public String serial;
     public String name;
     public CoordinatesBean coordinates;
-    public String tspass;
     
     @Override
     public int hashCode() {
@@ -45,8 +44,6 @@ public class StationDataBean {
         builder.append(name);
         builder.append(", coordinates=");
         builder.append(coordinates);
-        builder.append(", tspass=");
-        builder.append(tspass);
         builder.append("]");
         return builder.toString();
     }

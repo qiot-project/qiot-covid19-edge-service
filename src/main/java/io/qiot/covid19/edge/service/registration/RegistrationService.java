@@ -1,11 +1,12 @@
 package io.qiot.covid19.edge.service.registration;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,10 +14,8 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
 
-import io.qiot.covid19.edge.domain.RegisterBean;
 import io.qiot.covid19.edge.service.station.StationService;
 import io.qiot.covid19.edge.util.exception.RegistrationException;
 
@@ -25,8 +24,10 @@ public class RegistrationService {
     @Inject
     Logger LOGGER;
 
-    @ConfigProperty(name = "app.certificate.path", defaultValue = "/var/data/qiot/client.ts")
-    String dataFilePathString;
+    @ConfigProperty(name = "qiot.ts.path")
+    String tsPath;
+    @ConfigProperty(name = "qiot.ks.path")
+    String ksPath;
 
     @Inject
     @RestClient
@@ -35,50 +36,55 @@ public class RegistrationService {
     @Inject
     StationService stationService;
 
-    public RegisterBean register(String serial, String name, double longitude,
-            double latitude) throws RegistrationException {
-        RegisterBean registerBean=new RegisterBean();
+    public String register(String serial, String name, double longitude,
+            double latitude, String ksPassword) throws RegistrationException {
+        RegisterRequest registerRequest = null;
+        RegisterResponse registerResponse = null;
+
+        registerRequest = new RegisterRequest();
+        registerRequest.serial = serial;
+        registerRequest.name = name;
+        registerRequest.longitude = longitude;
+        registerRequest.latitude = latitude;
+        registerRequest.keyStorePassword = ksPassword;// TODO
         try {
-            Response response = registrationClient.register(serial, name,
-                    longitude, latitude);
-            MultipartFormDataInput formData = response
-                    .readEntity(MultipartFormDataInput.class);
+            registerResponse = registrationClient.register(registerRequest);
+            
+            LOGGER.info("Acquired stationID: {}", registerResponse.id);
+            String encodedTSString = registerResponse.truststore;
+            String encodedKSString = registerResponse.keystore;
 
-            registerBean.stationId = formData.getFormDataPart("id", String.class, null);
-            LOGGER.info("Acquired stationID: {}", registerBean.stationId);
-            InputStream trustStoreIS = formData.getFormDataPart("ts",
-                    InputStream.class, null);
-            LOGGER.info("Acquired certificate IS: {}", trustStoreIS);
-            registerBean.trustStorePassword = formData.getFormDataPart("tspass",
-                    String.class, null);
-            LOGGER.info("Acquired trust store password: {}",
-                    registerBean.trustStorePassword);
-
-            writeToFile(trustStoreIS);
-            updateConfig();
+            writeTS(encodedTSString);
+            writeKS(encodedKSString);
+            
+            return registerResponse.id;
         } catch (Exception e) {
             LOGGER.error(
                     "An error occurred registering the device to the data hub.",
                     e);
             throw new RegistrationException(e);
         }
-        return registerBean;
     }
 
-    private void updateConfig() {
-        
-
+    private void writeTS(String encodedTSString) throws IOException {
+        byte[] content = Base64.getDecoder()
+                .decode(encodedTSString.getBytes(StandardCharsets.UTF_8));
+        writeToFile(content, tsPath);
     }
 
-    private void writeToFile(InputStream trustStoreIS) throws IOException {
-        Path truststore = Paths.get(dataFilePathString);
-        Files.createFile(truststore);
-        byte[] buffer = trustStoreIS.readAllBytes();
-        //TODO: transform PEM into TRUST-STORE
-        try (OutputStream outputStream = Files.newOutputStream(truststore);) {
-            outputStream.write(buffer);
+    private void writeKS(String encodedKSString) throws IOException {
+        byte[] content = Base64.getDecoder()
+                .decode(encodedKSString.getBytes(StandardCharsets.UTF_8));
+        writeToFile(content, ksPath);
+    }
+
+    private void writeToFile(byte[] content, String destination)
+            throws IOException {
+        Path file = Paths.get(destination);
+        Files.createFile(file);
+        try (OutputStream outputStream = Files.newOutputStream(file);) {
+            outputStream.write(content);
         }
     }
-    
-    
+
 }

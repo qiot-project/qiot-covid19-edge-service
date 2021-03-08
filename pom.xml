@@ -14,10 +14,10 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.11.3.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>1.12.0.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.11.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>1.12.0.Final</quarkus.platform.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     </properties>
     <dependencyManagement>
@@ -35,7 +35,7 @@
         <!-- REST Endpoint -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-client-jsonb</artifactId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -54,26 +54,22 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jackson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-container-image-docker</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.jboss.jandex</groupId>
-                <artifactId>jandex-maven-plugin</artifactId>
-                <version>1.0.7</version>
-                <executions>
-                    <execution>
-                        <id>make-index</id>
-                        <goals>
-                            <goal>jandex</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--             <plugin> -->
+<!--                 <groupId>org.jboss.jandex</groupId> -->
+<!--                 <artifactId>jandex-maven-plugin</artifactId> -->
+<!--                 <version>1.0.7</version> -->
+<!--                 <executions> -->
+<!--                     <execution> -->
+<!--                         <id>make-index</id> -->
+<!--                         <goals> -->
+<!--                             <goal>jandex</goal> -->
+<!--                         </goals> -->
+<!--                     </execution> -->
+<!--                 </executions> -->
+<!--             </plugin> -->
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -115,19 +111,19 @@
             </activation>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.jboss.jandex</groupId>
-                        <artifactId>jandex-maven-plugin</artifactId>
-                        <version>1.0.7</version>
-                        <executions>
-                            <execution>
-                                <id>make-index</id>
-                                <goals>
-                                    <goal>jandex</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+<!--                     <plugin> -->
+<!--                         <groupId>org.jboss.jandex</groupId> -->
+<!--                         <artifactId>jandex-maven-plugin</artifactId> -->
+<!--                         <version>1.0.7</version> -->
+<!--                         <executions> -->
+<!--                             <execution> -->
+<!--                                 <id>make-index</id> -->
+<!--                                 <goals> -->
+<!--                                     <goal>jandex</goal> -->
+<!--                                 </goals> -->
+<!--                             </execution> -->
+<!--                         </executions> -->
+<!--                     </plugin> -->
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <version>${surefire-plugin.version}</version>

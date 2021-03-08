@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 @Path("/")
@@ -25,8 +25,9 @@ public interface NominatimServiceClient {
     @Path("/search")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    String query(@QueryParam("q") String address,@QueryParam("format") String format,
-            @QueryParam("addressdetails") int detailLevel)
-            throws Exception;
+    String query(@QueryParam("q") String address,
+            @QueryParam("format") String format,
+            @QueryParam("addressdetails") int detailLevel,
+            @QueryParam("accept-language") String language) throws Exception;
 
 }

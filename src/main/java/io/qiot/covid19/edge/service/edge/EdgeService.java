@@ -10,18 +10,18 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 
-import io.qiot.covid19.edge.domain.StationDataBean;
 import io.qiot.covid19.edge.service.sensor.SensorServiceClient;
 import io.qiot.covid19.edge.service.station.StationService;
 import io.qiot.covid19.edge.service.telemetry.MqttEndpointClient;
 import io.qiot.covid19.edge.util.decorator.TelemetryDecorator;
+import io.qiot.covid19.edge.util.exception.DataDecorationException;
 import io.qiot.covid19.edge.util.exception.DataValidationException;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 
 /**
- * @author abattagl
+ * @author andreabattaglia
  *
  */
 @Startup
@@ -52,30 +52,64 @@ public class EdgeService {
         stationService.checkRegistration();
     }
 
-    @Scheduled(every = "3s", delayed = "5s")
-    void run() {
+    @Scheduled(every = "5s", delayed = "10s")
+    void gasTelemetry() {
         String telemetry = null;
         String enrichedTelemetry = null;
         try {
             telemetry = sensorServiceClient.getGasMeasurement();
-            enrichedTelemetry = measurementDecorator
-                    .decorate(stationService.getStationId(), telemetry);
-            LOGGER.info("Collected GAS measurement: {}", enrichedTelemetry);
-            telemetryEndpointClient.sendGas(enrichedTelemetry);
-        } catch (Exception e) {
-            LOGGER.error("An error occurred retrieving GAS maeasurement", e);
+            LOGGER.info("Collected GAS telemetry: {}", telemetry);
+        } catch (Exception e1) {
+            LOGGER.error(
+                    "An error occurred collecting GAS telemetry from the sensor service",
+                    e1);
+            return;
         }
         try {
-            telemetry = sensorServiceClient.getParticulatesMeasurement();
             enrichedTelemetry = measurementDecorator
                     .decorate(stationService.getStationId(), telemetry);
-            LOGGER.info("Collected PARTICULA measurement: {}",
-                    enrichedTelemetry);
+            LOGGER.info("Enriched GAS telemetry: {}", enrichedTelemetry);
+        } catch (DataDecorationException e1) {
+            LOGGER.error("An error occurred enreaching GAS telemetry", e1);
+            return;
+        }
+        try {
+            telemetryEndpointClient.sendGas(enrichedTelemetry);
+        } catch (Exception e) {
+            LOGGER.error("An error occurred producing the GAS telemetry event",
+                    e);
+            return;
+        }
+    }
+
+    @Scheduled(every = "5s", delayed = "12s")
+    void pollutionTelemetry() {
+        String telemetry = null;
+        String enrichedTelemetry = null;
+        try {
+            telemetry = sensorServiceClient.getParticulatesMeasurement();
+        } catch (Exception e1) {
+            LOGGER.error(
+                    "An error occurred collecting POLLUTION telemetry from the sensor service",
+                    e1);
+            return;
+        }
+        try {
+            enrichedTelemetry = measurementDecorator
+                    .decorate(stationService.getStationId(), telemetry);
+            LOGGER.info("Enriched GAS telemetry: {}", enrichedTelemetry);
+        } catch (DataDecorationException e1) {
+            LOGGER.error("An error occurred enreaching POLLUTION telemetry",
+                    e1);
+            return;
+        }
+        try {
             telemetryEndpointClient.sendPollution(enrichedTelemetry);
         } catch (Exception e) {
             LOGGER.error(
-                    "An error occurred retrieving Particulates maeasurement",
+                    "An error occurred producing the POLLUTION telemetry event",
                     e);
+            return;
         }
     }
 }

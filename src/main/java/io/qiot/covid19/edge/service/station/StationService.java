@@ -6,7 +6,6 @@ package io.qiot.covid19.edge.service.station;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qiot.covid19.edge.domain.CoordinatesBean;
-import io.qiot.covid19.edge.domain.RegisterBean;
 import io.qiot.covid19.edge.domain.StationDataBean;
 import io.qiot.covid19.edge.service.localization.LocalizationService;
 import io.qiot.covid19.edge.service.registration.RegistrationService;
@@ -34,7 +32,7 @@ public class StationService {
     @Inject
     Logger LOGGER;
 
-    @ConfigProperty(name = "app.datafile.path")
+    @ConfigProperty(name = "qiot.datafile.path")
     String dataFilePathString;
 
     @Inject
@@ -50,22 +48,19 @@ public class StationService {
     @Inject
     LocalizationService localizationService;
 
-    @ConfigProperty(name = "app.station.serial")
+    @ConfigProperty(name = "qiot.station.serial")
     String STATION_SERIAL;
-    @ConfigProperty(name = "app.station.address")
+    @ConfigProperty(name = "qiot.station.address")
     String STATION_ADDRESS;
-    @ConfigProperty(name = "app.station.name")
+    @ConfigProperty(name = "qiot.station.name")
     String STATION_NAME;
 
-    private StationDataBean stationData;
+    @ConfigProperty(name = "qiot.ts.password")
+    String tsPassword;
+    @ConfigProperty(name = "qiot.ks.password")
+    String ksPassword;
 
-    // void onStart(@Observes StartupEvent ev) {
-    // LOGGER.info("Init {}", this.getClass());
-    // stationSerial = "stationserial";
-    // coordinates = new CoordinatesBean();
-    // coordinates.longitude = 0;
-    // coordinates.latitude = 0;
-    // }
+    private StationDataBean stationData;
 
     public StationDataBean checkRegistration() throws DataValidationException {
         Path dataFilePath = Paths.get(dataFilePathString);
@@ -74,37 +69,14 @@ public class StationService {
                     "Device is already registered. Loading data from persistent volume...");
             try {
                 String datafileContent = Files.readString(dataFilePath);
-                // try (Jsonb jsonb = JsonbBuilder.create();) {
-                // stationData = jsonb.fromJson(datafileContent,
-                // StationDataBean.class);
-                // }
                 stationData = MAPPER.readValue(datafileContent,
                         StationDataBean.class);
-                // try (StringReader sr = new StringReader(datafileContent);
-                // JsonReader reader = Json.createReader(sr)) {
-                // stationData = new StationDataBean();
-                // JsonObject jsonObject = reader.readObject();
-                // stationData.id = jsonObject.getString("id");
-                // stationData.serial = jsonObject.getString("serial");
-                // stationData.name = jsonObject.getString("name");
-                // CoordinatesBean coordinates = new CoordinatesBean();
-                // JsonObject coordinatesJsonObject = jsonObject
-                // .getJsonObject("coordinates");
-                // coordinates = new CoordinatesBean();
-                // coordinates.longitude = coordinatesJsonObject
-                // .getJsonNumber("longitude").doubleValue();
-                // coordinates.latitude = coordinatesJsonObject
-                // .getJsonNumber("latitude").doubleValue();
-                // stationData.coordinates = coordinates;
-                // coordinates = null;
-                // }
             } catch (Exception e) {
                 LOGGER.error("An error occurred loading the station data file.",
                         e);
                 throw new DataValidationException(e);
             }
             LOGGER.info("Data loaded successfully: {}", stationData);
-            // TODO: check cert validity
         } else {
             LOGGER.info(
                     "Device is not registered. Stepping through the registration process...");
@@ -112,20 +84,21 @@ public class StationService {
             stationData = new StationDataBean();
             try {
                 if (STATION_SERIAL.equals("empty"))
-                    stationData.serial = sensorServiceClient.getSerialId()
-                            .getString("id");
+                    stationData.serial = sensorServiceClient.getSerialId().id;
                 else
                     stationData.serial = STATION_SERIAL;
                 stationData.name = STATION_NAME;
                 stationData.coordinates = localizationService
                         .getCoordinates(STATION_ADDRESS);
-                RegisterBean registerBean = registrationService.register(
+                String stationId = registrationService.register(
                         stationData.serial, stationData.name,
                         stationData.coordinates.longitude,
-                        stationData.coordinates.latitude);
-                LOGGER.info("Raw registration info: {}", registerBean);
-                stationData.id = registerBean.stationId;
-                stationData.tspass = registerBean.trustStorePassword;
+                        stationData.coordinates.latitude, ksPassword); // TODO:
+                                                                       // check
+                                                                       // ts
+                                                                       // password
+                LOGGER.info("Received station ID: {}", stationId);
+                stationData.id = stationId;
                 Files.createFile(dataFilePath);
 
                 String stationDataString = MAPPER
@@ -160,7 +133,11 @@ public class StationService {
     }
 
     public String getTrustStorePassword() {
-        return stationData.tspass;
+        return tsPassword;
+    }
+
+    public String getKeyStorePassword() {
+        return ksPassword;
     }
 
 }
