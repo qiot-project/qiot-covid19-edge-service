@@ -55,10 +55,10 @@ public class StationService {
     @ConfigProperty(name = "qiot.station.name")
     String STATION_NAME;
 
-    @ConfigProperty(name = "qiot.ts.password")
-    String tsPassword;
-    @ConfigProperty(name = "qiot.ks.password")
+    @ConfigProperty(name = "qiot.mqtts.ks.password")
     String ksPassword;
+    @ConfigProperty(name = "qiot.mqtts.ts.password")
+    String tsPassword;
 
     private StationDataBean stationData;
 
@@ -93,10 +93,8 @@ public class StationService {
                 String stationId = registrationService.register(
                         stationData.serial, stationData.name,
                         stationData.coordinates.longitude,
-                        stationData.coordinates.latitude, ksPassword); // TODO:
-                                                                       // check
-                                                                       // ts
-                                                                       // password
+                        stationData.coordinates.latitude, ksPassword); 
+
                 LOGGER.info("Received station ID: {}", stationId);
                 stationData.id = stationId;
                 Files.createFile(dataFilePath);

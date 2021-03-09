@@ -24,10 +24,10 @@ public class RegistrationService {
     @Inject
     Logger LOGGER;
 
-    @ConfigProperty(name = "qiot.ts.path")
-    String tsPath;
-    @ConfigProperty(name = "qiot.ks.path")
+    @ConfigProperty(name = "qiot.mqtts.ks.path")
     String ksPath;
+    @ConfigProperty(name = "qiot.mqtts.ts.path")
+    String tsPath;
 
     @Inject
     @RestClient
@@ -46,7 +46,7 @@ public class RegistrationService {
         registerRequest.name = name;
         registerRequest.longitude = longitude;
         registerRequest.latitude = latitude;
-        registerRequest.keyStorePassword = ksPassword;// TODO
+        registerRequest.keyStorePassword = ksPassword;
         try {
             registerResponse = registrationClient.register(registerRequest);
             
@@ -66,21 +66,22 @@ public class RegistrationService {
         }
     }
 
-    private void writeTS(String encodedTSString) throws IOException {
-        byte[] content = Base64.getDecoder()
-                .decode(encodedTSString.getBytes(StandardCharsets.UTF_8));
-        writeToFile(content, tsPath);
-    }
-
     private void writeKS(String encodedKSString) throws IOException {
         byte[] content = Base64.getDecoder()
                 .decode(encodedKSString.getBytes(StandardCharsets.UTF_8));
         writeToFile(content, ksPath);
     }
 
+    private void writeTS(String encodedTSString) throws IOException {
+        byte[] content = Base64.getDecoder()
+                .decode(encodedTSString.getBytes(StandardCharsets.UTF_8));
+        writeToFile(content, tsPath);
+    }
+
     private void writeToFile(byte[] content, String destination)
             throws IOException {
         Path file = Paths.get(destination);
+        Files.createDirectories(file.getParent());
         Files.createFile(file);
         try (OutputStream outputStream = Files.newOutputStream(file);) {
             outputStream.write(content);
