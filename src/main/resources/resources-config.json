@@ -1,0 +1,6 @@
+{
+  "bundles": [
+    {"name":"org.eclipse.paho.client.mqttv3.internal.nls.messages"},
+    {"name":"org.eclipse.paho.client.mqttv3.internal.nls.logcat"}
+  ]
+}
