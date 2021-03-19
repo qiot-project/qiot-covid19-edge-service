@@ -24,17 +24,10 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
-import org.eclipse.paho.client.mqttv3.internal.MessageCatalog;
-import org.eclipse.paho.client.mqttv3.internal.ResourceBundleCatalog;
-import org.eclipse.paho.client.mqttv3.internal.SSLNetworkModuleFactory;
-import org.eclipse.paho.client.mqttv3.internal.TCPNetworkModuleFactory;
-import org.eclipse.paho.client.mqttv3.logging.JSR47Logger;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.eclipse.paho.client.mqttv3.spi.NetworkModuleFactory;
 import org.slf4j.Logger;
 
 import io.qiot.covid19.edge.util.ssl.SslUtils;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /*
 Fixed #2086 by using client-maven-plugin:0.1.27. This linked with the missing native library, which was missing when calling native-image directly from command line.
@@ -48,9 +41,6 @@ Instantiated MqttClient with persistence = null, since the default persistence c
  * @author andreabattaglia
  */
 @ApplicationScoped
-@RegisterForReflection(targets = { JSR47Logger.class, MessageCatalog.class,
-        ResourceBundleCatalog.class, NetworkModuleFactory.class,
-        TCPNetworkModuleFactory.class, SSLNetworkModuleFactory.class })
 public class MqttConnectionProducer {
 
     /** The logger. */
