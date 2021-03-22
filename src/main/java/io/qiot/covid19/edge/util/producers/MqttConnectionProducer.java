@@ -163,6 +163,9 @@ public class MqttConnectionProducer {
             client.setBufferOpts(bufferOpts);
 
             try {
+                
+                LOGGER.info("Connecting to MQTT Broker: {}.", client.getServerURI());
+                
                 client.connect(options);
             } catch (MqttSecurityException e) {
                 throw new RuntimeException(e);
@@ -186,4 +189,5 @@ public class MqttConnectionProducer {
                 throw new RuntimeException(e);
             }
     }
+    
 }
