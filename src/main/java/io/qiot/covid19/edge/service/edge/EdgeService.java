@@ -12,13 +12,14 @@ import org.slf4j.Logger;
 
 import io.qiot.covid19.edge.service.sensor.SensorServiceClient;
 import io.qiot.covid19.edge.service.station.StationService;
-import io.qiot.covid19.edge.service.telemetry.MqttEndpointClient;
+import io.qiot.covid19.edge.service.telemetry.TelemetryService;
 import io.qiot.covid19.edge.util.decorator.TelemetryDecorator;
 import io.qiot.covid19.edge.util.exception.DataDecorationException;
 import io.qiot.covid19.edge.util.exception.DataValidationException;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
+import io.vertx.mqtt.MqttException;
 
 /**
  * @author andreabattaglia
@@ -32,7 +33,7 @@ public class EdgeService {
     Logger LOGGER;
 
     @Inject
-    MqttEndpointClient telemetryEndpointClient;
+    TelemetryService telemetryService;
 
     @Inject
     StationService stationService;
@@ -50,9 +51,10 @@ public class EdgeService {
         LOGGER.info("The application is starting...{}");
         // stationData =
         stationService.checkRegistration();
+        telemetryService.getReady();
     }
 
-    @Scheduled(every = "5s", delayed = "10s")
+    @Scheduled(every = "5s", delayed = "5s")
     void gasTelemetry() {
         String telemetry = null;
         String enrichedTelemetry = null;
@@ -73,16 +75,10 @@ public class EdgeService {
             LOGGER.error("An error occurred enreaching GAS telemetry", e1);
             return;
         }
-        try {
-            telemetryEndpointClient.sendGas(enrichedTelemetry);
-        } catch (Exception e) {
-            LOGGER.error("An error occurred producing the GAS telemetry event",
-                    e);
-            return;
-        }
+            telemetryService.sendGas(enrichedTelemetry);
     }
 
-    @Scheduled(every = "5s", delayed = "12s")
+    @Scheduled(every = "5s", delayed = "7s")
     void pollutionTelemetry() {
         String telemetry = null;
         String enrichedTelemetry = null;
@@ -104,7 +100,7 @@ public class EdgeService {
             return;
         }
         try {
-            telemetryEndpointClient.sendPollution(enrichedTelemetry);
+            telemetryService.sendPollution(enrichedTelemetry);
         } catch (Exception e) {
             LOGGER.error(
                     "An error occurred producing the POLLUTION telemetry event",
