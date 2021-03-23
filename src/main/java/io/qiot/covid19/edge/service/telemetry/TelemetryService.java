@@ -78,8 +78,8 @@ public class TelemetryService {
     public void sendGas(String data) {
         LOGGER.info("Sending out GAS measurement");
 
-//        mqttClient.publishAndAwait(gasTopicName, Buffer.buffer(data),
-//                MqttQoS.valueOf(gasTopicQoS), false, false);
+        mqttClient.publishAndAwait(gasTopicName, Buffer.buffer(data),
+                MqttQoS.valueOf(gasTopicQoS), false, false);
     }
 
     /**

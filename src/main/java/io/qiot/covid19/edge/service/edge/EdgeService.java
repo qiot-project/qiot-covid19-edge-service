@@ -75,7 +75,14 @@ public class EdgeService {
             LOGGER.error("An error occurred enreaching GAS telemetry", e1);
             return;
         }
+        try {
             telemetryService.sendGas(enrichedTelemetry);
+        } catch (Exception e) {
+            LOGGER.error(
+                    "An error occurred producing the GAS telemetry event",
+                    e);
+            return;
+        }
     }
 
     @Scheduled(every = "5s", delayed = "7s")
