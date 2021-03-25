@@ -1,25 +1,49 @@
 package io.qiot.covid19.edge.service.registration;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonPropertyOrder({ "serial", "name", "longitude", "latitude",
-//        "keyStorePassword" })
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "serial", "name", "longitude", "latitude",
+        "keyStorePassword" })
+@RegisterForReflection
 public class RegisterRequest {
 
-    // @JsonProperty("serial")
+     @JsonProperty("serial")
     public String serial;
-    // @JsonProperty("name")
+     @JsonProperty("name")
     public String name;
-    // @JsonProperty("longitude")
+     @JsonProperty("longitude")
     public Double longitude;
-    // @JsonProperty("latitude")
+     @JsonProperty("latitude")
     public Double latitude;
     /**
      * KeyStore Password
      * 
      */
-    // @JsonProperty("keyStorePassword")
-    // @JsonPropertyDescription("KeyStore Password")
+     @JsonProperty("keyStorePassword")
+     @JsonPropertyDescription("KeyStore Password")
     public String keyStorePassword;
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("RegisterRequest [serial=");
+        builder.append(serial);
+        builder.append(", name=");
+        builder.append(name);
+        builder.append(", longitude=");
+        builder.append(longitude);
+        builder.append(", latitude=");
+        builder.append(latitude);
+        builder.append(", keyStorePassword=");
+        builder.append(keyStorePassword);
+        builder.append("]");
+        return builder.toString();
+    }
 
     // @JsonProperty("serial")
     // public String getSerial() {
@@ -78,5 +102,7 @@ public class RegisterRequest {
     // public void setKeyStorePassword(String keyStorePassword) {
     // this.keyStorePassword = keyStorePassword;
     // }
+     
+     
 
 }

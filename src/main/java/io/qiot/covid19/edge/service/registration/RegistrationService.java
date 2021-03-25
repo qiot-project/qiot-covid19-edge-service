@@ -48,7 +48,9 @@ public class RegistrationService {
         registerRequest.latitude = latitude;
         registerRequest.keyStorePassword = ksPassword;
         try {
+            LOGGER.debug("Attempting registration process with the following data: {}", registerRequest);
             registerResponse = registrationClient.register(registerRequest);
+            LOGGER.debug("Registratior process results: {}", registerResponse);
             
             LOGGER.info("Acquired stationID: {}", registerResponse.id);
             String encodedTSString = registerResponse.truststore;

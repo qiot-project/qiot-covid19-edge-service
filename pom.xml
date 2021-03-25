@@ -8,10 +8,10 @@
     <artifactId>edge-service</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <properties>
-        <quarkus-plugin.version>1.11.3.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>1.11.1.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.11.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>1.11.1.Final</quarkus.platform.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <docker-plugin.version>0.28.0</docker-plugin.version>
@@ -35,42 +35,39 @@
         <!-- REST Endpoint -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-client-jsonb</artifactId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <!-- MQTT Endpoint Client -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-scheduler</artifactId>
         </dependency>
-<!--         <dependency> -->
-<!--             <groupId>io.quarkus</groupId> -->
-<!--             <artifactId>quarkus-smallrye-reactive-messaging-mqtt</artifactId> -->
-<!--         </dependency> -->
+        <!-- <dependency> -->
+        <!-- <groupId>io.quarkus</groupId> -->
+        <!-- <artifactId>quarkus-smallrye-reactive-messaging-mqtt</artifactId> -->
+        <!-- </dependency> -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-vertx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.smallrye.reactive</groupId>
-            <artifactId>smallrye-mutiny-vertx-mqtt</artifactId>
-            <version>1.4.0</version>
+            <artifactId>
+                quarkus-smallrye-reactive-messaging-mqtt
+            </artifactId>
         </dependency>
     </dependencies>
     <build>
         <plugins>
-            <!-- <plugin> -->
-            <!-- <groupId>org.jboss.jandex</groupId> -->
-            <!-- <artifactId>jandex-maven-plugin</artifactId> -->
-            <!-- <version>1.0.7</version> -->
-            <!-- <executions> -->
-            <!-- <execution> -->
-            <!-- <id>make-index</id> -->
-            <!-- <goals> -->
-            <!-- <goal>jandex</goal> -->
-            <!-- </goals> -->
-            <!-- </execution> -->
-            <!-- </executions> -->
-            <!-- </plugin> -->
+            <plugin>
+            <groupId>org.jboss.jandex</groupId>
+            <artifactId>jandex-maven-plugin</artifactId>
+            <version>1.0.7</version>
+            <executions>
+            <execution>
+            <id>make-index</id>
+            <goals>
+            <goal>jandex</goal>
+            </goals>
+            </execution>
+            </executions>
+            </plugin>
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>

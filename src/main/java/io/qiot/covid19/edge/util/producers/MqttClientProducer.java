@@ -1,7 +1,5 @@
 package io.qiot.covid19.edge.util.producers;
 
-import org.slf4j.LoggerFactory;
-
 import java.security.KeyStore;
 
 import javax.annotation.PostConstruct;
@@ -15,9 +13,7 @@ import javax.net.ssl.TrustManagerFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
-import io.qiot.covid19.edge.util.ssl.SslUtils;
 import io.vertx.core.net.JksOptions;
-import io.vertx.core.net.PfxOptions;
 import io.vertx.mqtt.MqttClientOptions;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.mqtt.MqttClient;
@@ -33,10 +29,6 @@ public class MqttClientProducer {
     /** The logger. */
     @Inject
     Logger LOGGER;
-
-    /** The ssl utils. */
-    @Inject
-    SslUtils sslUtils;
 
     /** The host. */
     @ConfigProperty(name = "qiot.mqtt.client.connection.host")
@@ -102,6 +94,7 @@ public class MqttClientProducer {
         options.setSsl(enableSsl);
         options.setKeyCertOptions(getKeyCertOptions());
         options.setTrustOptions(getTrustOptions());
+        options.setMaxInflightQueue(65535);
         
         LOGGER.debug("Vert.x Mqtt client options: {}", options);
         
