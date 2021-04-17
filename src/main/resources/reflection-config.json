@@ -1,0 +1,102 @@
+[
+	{
+		"name": "org.eclipse.paho.client.mqttv3.logging.JSR47Logger",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.MessageCatalog",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.ResourceBundleCatalog",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ResourceBundle",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	
+    {
+        "name": "org.eclipse.paho.client.mqttv3.internal.NetworkModuleService",
+        "allDeclaredConstructors": true,
+        "allPublicConstructors": true,
+        "allDeclaredMethods": true,
+        "allPublicMethods": true,
+        "allDeclaredFields": true,
+        "allPublicFields": true
+    },
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.NetworkModule",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+    {
+        "name": "org.eclipse.paho.client.mqttv3.spi.NetworkModuleFactory",
+        "allDeclaredConstructors": true,
+        "allPublicConstructors": true,
+        "allDeclaredMethods": true,
+        "allPublicMethods": true,
+        "allDeclaredFields": true,
+        "allPublicFields": true
+    },
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.TCPNetworkModule",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.TCPNetworkModuleFactory",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.SSLNetworkModuleFactory",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "org.eclipse.paho.client.mqttv3.internal.SSLNetworkModuleFactory",
+		"allDeclaredConstructors": true,
+		"allPublicConstructors": true,
+		"allDeclaredMethods": true,
+		"allPublicMethods": true,
+		"allDeclaredFields": true,
+		"allPublicFields": true
+	}
+]
