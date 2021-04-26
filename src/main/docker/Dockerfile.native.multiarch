@@ -5,7 +5,7 @@ RUN mvn -f /usr/src/app/pom.xml -B de.qaware.maven:go-offline-maven-plugin:1.2.5
 COPY src /usr/src/app/src
 RUN mvn -f /usr/src/app/pom.xml -Pnative clean package
 
-FROM qiot-ubi-multiarch:1.0
+FROM quay.io/qiot/ubi-multiarch:v1.0.1
 WORKDIR /work/
 COPY --from=builder /usr/src/app/target/*-runner /work/application
 
